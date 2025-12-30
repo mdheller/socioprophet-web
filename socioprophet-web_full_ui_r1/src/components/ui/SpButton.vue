@@ -24,3 +24,4 @@ withDefaults(defineProps<{
   disabled: false,
   type: 'button',
 })
+</script>
