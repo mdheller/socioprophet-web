@@ -1,0 +1,7 @@
+# editor/OS noise
+.DS_Store
+
+# rescue + backup artifacts
+_rescue_*
+*.bak
+*.bak.*
