@@ -28,7 +28,6 @@ import Filters from "./pages/Filters.vue";
 import Compliance from "./pages/Compliance.vue";
 import PorterConsole from "./pages/PorterConsole.vue";
 import UiKit from "./pages/UiKit.vue";
-import NotFound from "./pages/NotFound.vue";
 
 const routes = [
   { path: "/", redirect: "/dashboard" },
