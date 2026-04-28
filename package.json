@@ -9,12 +9,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit",
-    "verify": "npm run typecheck && npm run build",
-    "storybook:dev": "storybook dev -p 6006",
-    "storybook:build": "storybook build"
+    "verify": "npm run typecheck && npm run build"
   },
   "dependencies": {
-    "@carbon/icons-vue": "^10.99.1",
     "@carbon/styles": "^1.89.0",
     "@carbon/vue": "^3.0.27",
     "d3": "^7.9.0",
@@ -24,11 +21,6 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^10.1.11",
-    "@storybook/addon-docs": "^10.1.11",
-    "@storybook/addon-links": "^10.1.11",
-    "@storybook/cli": "^10.1.11",
-    "@storybook/vue3-vite": "^10.1.11",
     "@vitejs/plugin-vue": "^5.0.0",
     "sass": "^1.77.0",
     "typescript": "^5.9.3",
