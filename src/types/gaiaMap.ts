@@ -108,6 +108,17 @@ export type RouteGraphList = {
   response_receipt: ResponseReceipt;
 };
 
+export type RuntimeBoundaryList = {
+  runtimes: Array<{
+    name: string;
+    status: string;
+    validation_command: string;
+    lattice_admission: string;
+  }>;
+  admission_rule: string;
+  response_receipt?: ResponseReceipt;
+};
+
 export type GovernanceState = {
   validation_lanes: Array<{
     id: string;
@@ -140,6 +151,7 @@ export type GaiaMapSnapshot = {
   feature: OsmFeatureBinding;
   h3: H3FeatureLayerSearch;
   routes: RouteGraphList;
+  runtimeBoundaries: RuntimeBoundaryList;
   governance: GovernanceState;
   search: SherlockResult;
 };
