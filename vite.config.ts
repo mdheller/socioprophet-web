@@ -1,10 +1,10 @@
-import { defineConfig, loadEnv } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig, loadEnv } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), 'VITE_')
-  const base = env.VITE_ROUTER_BASE || '/'
-  
+  const env = loadEnv(mode, process.cwd(), 'VITE_');
+  const base = env.VITE_ROUTER_BASE || '/';
+
   return {
     base,
     plugins: [vue()],
@@ -13,18 +13,16 @@ export default defineConfig(({ mode }) => {
       open: true,
       proxy: {
         '/api': {
-          target: env.VITE_API_BASE || 'http://localhost:8000',
+          target: env.VITE_API_BASE || 'http://localhost:8088',
           changeOrigin: true,
-          rewrite: p => p.replace(/^\/api/, '')
+          rewrite: (path) => path.replace(/^\/api/, ''),
         },
         '/kui': {
           target: env.VITE_API_BASE || 'http://localhost:8000',
           changeOrigin: true,
-          rewrite: p => p
-        }
-      }
-    }
-  }
-})
-
-export default defineConfig(({ mode })=>{ const env=loadEnv(mode,process.cwd(),'VITE_'); const base=env.VITE_ROUTER_BASE||'/'; return { base, plugins:[vue()], server:{port:5174, open:true, proxy:{ '/api':{target: env.VITE_API_BASE||'http://localhost:8000', changeOrigin:true, rewrite:p=>p.replace(/^\/api/,'')}, '/kui':{target: env.VITE_API_BASE||'http://localhost:8000', changeOrigin:true, rewrite:p=>p} } } } })
+          rewrite: (path) => path,
+        },
+      },
+    },
+  };
+});

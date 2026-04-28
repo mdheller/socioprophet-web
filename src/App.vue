@@ -1,131 +1,89 @@
-import { RouterLink, RouterView } from "vue-router"
-import { RouterLink, RouterView } from "vue-router"
-import { RouterLink, RouterView } from "vue-router"
 <template>
-  <div class="app">
-    <header class="topbar">
-      <div class="brand">SocioProphet</div>
-
-      <nav class="toplinks">
-        <RouterLink to="/dashboard">Dashboard</RouterLink>
-        <RouterLink to="/builder">Builder</RouterLink>
-        <RouterLink to="/entities">Entities</RouterLink>
-        <RouterLink to="/terminal">Terminal</RouterLink>
-        <RouterLink to="/settings">Settings</RouterLink>
+  <div class="sp-shell">
+    <header class="sp-topbar">
+      <RouterLink class="sp-brand" to="/news">SocioProphet</RouterLink>
+      <nav class="sp-domain-nav" aria-label="Primary domains">
+        <RouterLink to="/news">News &amp; Events</RouterLink>
+        <RouterLink to="/law/international-law">Law &amp; Regulation</RouterLink>
+        <RouterLink to="/people/search">People &amp; Society</RouterLink>
+        <RouterLink to="/economy/macro-economics">Economy &amp; Industry</RouterLink>
+        <RouterLink to="/markets/indices-funds">Capital &amp; Markets</RouterLink>
+        <RouterLink to="/weather/forecast">Weather &amp; Resources</RouterLink>
+        <RouterLink to="/map">Maps</RouterLink>
       </nav>
+      <div class="sp-profile-indicator" aria-hidden="true" />
     </header>
 
-    <div class="body">
-      <aside class="sidebar">
-        <div class="section">Workspace</div>
-        <RouterLink v-for="i in workspace" :key="i.to" class="item" :to="i.to">{{ i.label }}</RouterLink>
+    <nav class="sp-tabbar" aria-label="Workspace tabs">
+      <button class="sp-tab-menu" type="button" aria-label="Open navigation">☷</button>
+      <RouterLink v-for="tab in tabLinks" :key="tab.to" :to="tab.to">{{ tab.label }}</RouterLink>
+    </nav>
 
-        <div class="section">Governance</div>
-        <RouterLink v-for="i in governance" :key="i.to" class="item" :to="i.to">{{ i.label }}</RouterLink>
-
-        <div class="section">Platform</div>
-        <RouterLink v-for="i in platform" :key="i.to" class="item" :to="i.to">{{ i.label }}</RouterLink>
+    <div class="sp-workspace">
+      <aside class="sp-left-rail" aria-label="Workspace rail">
+        <RouterLink to="/news" title="News">☷</RouterLink>
+        <RouterLink to="/reader" title="Reader">▤</RouterLink>
+        <RouterLink to="/map" title="Maps">⌖</RouterLink>
+        <RouterLink to="/people/search" title="People">◫</RouterLink>
+        <RouterLink to="/economy/macro-economics" title="Economy">◔</RouterLink>
+        <RouterLink to="/analytics" title="Analytics">⌁</RouterLink>
+        <RouterLink to="/markets/indices-funds" title="Markets">▥</RouterLink>
+        <RouterLink to="/gates" title="Gates">◉</RouterLink>
+        <RouterLink to="/settings" title="Settings">⚙</RouterLink>
       </aside>
 
-      <main class="content">
+      <section class="sp-stage">
+        <div class="sp-breadcrumbs">
+          <span v-for="(crumb, index) in breadcrumbs" :key="`${crumb}-${index}`">
+            <span>{{ crumb }}</span>
+            <span v-if="index < breadcrumbs.length - 1" class="sp-crumb-separator">/</span>
+          </span>
+        </div>
         <RouterView />
-      </main>
+      </section>
     </div>
+
+    <footer class="sp-agent-shell">
+      <div class="sp-agent-search">
+        <span>⌕</span>
+        <input type="search" placeholder="Search or command…" />
+      </div>
+    </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { computed } from 'vue';
+import { RouterLink, RouterView, useRoute } from 'vue-router';
+import { domainSurfaces, surfaceForRoute, surfacesForDomain } from './config/domainRoutes';
 
-type NavItem = { label: string; to: string };
+const route = useRoute();
 
-const workspace: NavItem[] = [
-  { label: "Dashboard", to: "/dashboard" },
-  { label: "Builder", to: "/builder" },
-  { label: "Entities", to: "/entities" },
-  { label: "Layouts", to: "/layouts" },
-  { label: "Reader", to: "/reader" },
-  { label: "Code Search", to: "/code" },
-];
+const surface = computed(() => surfaceForRoute(route.path));
+const activeDomain = computed(() => {
+  if (route.path.startsWith('/map')) return 'Maps & Analytics';
+  if (surface.value?.domain) return surface.value.domain;
+  if (route.path.startsWith('/analytics')) return 'Maps & Analytics';
+  return 'News & Events';
+});
 
-const governance: NavItem[] = [
-  { label: "Policies", to: "/policies" },
-  { label: "Datasets", to: "/datasets" },
-  { label: "Gates", to: "/gates" },
-  { label: "Attestations", to: "/attestations" },
-  { label: "Credentials", to: "/credentials" },
-  { label: "Compliance", to: "/compliance" },
-];
+const tabLinks = computed(() => {
+  const surfaces = surfacesForDomain(activeDomain.value).slice(0, 6);
+  if (activeDomain.value === 'Maps & Analytics') {
+    return [
+      { label: 'Map Workbench', to: '/map' },
+      ...surfaces.filter((item) => item.route !== '/map').slice(0, 5).map((item) => ({ label: item.item, to: item.route })),
+    ];
+  }
+  return surfaces.map((item) => ({ label: item.item, to: item.route }));
+});
 
-const platform: NavItem[] = [
-  { label: "Terminal", to: "/terminal" },
-  { label: "Console", to: "/console" },
-  { label: "Specs", to: "/specs" },
-  { label: "Runs", to: "/runs" },
-  { label: "Experiments", to: "/experiments" },
-  { label: "Settings", to: "/settings" },
-];
+const breadcrumbs = computed(() => {
+  if (route.path.startsWith('/map')) return ['Maps & Analytics', 'OpenStreetMap', 'GAIA world model'];
+  if (surface.value) return [surface.value.domain, surface.value.item];
+  const fallback = domainSurfaces.find((item) => route.path.startsWith(item.route));
+  if (fallback) return [fallback.domain, fallback.item];
+  if (route.path.startsWith('/console')) return ['Platform', 'Console'];
+  return ['News & Events', 'Workspace'];
+});
 </script>
-
-<style scoped>
-.app { min-height: 100vh; }
-.topbar {
-  position: sticky; top: 0; z-index: 10;
-  padding: 12px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.12);
-  display: flex; gap: 16px; align-items: center;
-  backdrop-filter: blur(10px);
-}
-.brand { font-weight: 800; letter-spacing: 0.2px; }
-.toplinks { display: flex; gap: 12px; flex-wrap: wrap; }
-.toplinks a.router-link-active { font-weight: 800; text-decoration: underline; }
-
-.body { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 52px); }
-.sidebar {
-  border-right: 1px solid rgba(255,255,255,0.10);
-  padding: 14px 12px;
-}
-.section { margin: 14px 8px 8px; font-size: 12px; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.08em; }
-.item { display: block; padding: 8px 10px; border-radius: 10px; text-decoration: none; }
-.item.router-link-active { font-weight: 800; text-decoration: underline; }
-.content { padding: 16px 18px; }
-@media (max-width: 900px) {
-  .body { grid-template-columns: 1fr; }
-  .sidebar { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.10); }
-}
-</style>
-<template>
-  <div>
-    <header class='topbar'>
-      <div class='brand'>SocioProphet</div>
-      <nav class='nav'>
-        <RouterLink to='/dashboard'>Dash</RouterLink>
-        <RouterLink to='/builder'>Builder</RouterLink>
-        <RouterLink to='/entities'>Entities</RouterLink>
-        <RouterLink to='/layouts'>Layouts</RouterLink>
-        <RouterLink to='/specs'>Specs</RouterLink>
-        <RouterLink to='/terminal'>Terminal</RouterLink>
-        <RouterLink to='/settings'>Settings</RouterLink>
-        <RouterLink to='/research'>Research</RouterLink>
-        <RouterLink to='/reader'>Reader</RouterLink>
-        <RouterLink to='/code'>Code</RouterLink>
-        <RouterLink to='/stories'>Stories</RouterLink>
-        <RouterLink to='/journal'>Journal</RouterLink>
-        <RouterLink to='/experiments'>Experiments</RouterLink>
-        <RouterLink to='/runs'>Runs</RouterLink>
-        <RouterLink to='/policies'>Policies</RouterLink>
-        <RouterLink to='/datasets'>Datasets</RouterLink>
-        <RouterLink to='/gates'>Gates</RouterLink>
-        <RouterLink to='/attestations'>Attestations</RouterLink>
-        <RouterLink to='/credentials'>Credentials</RouterLink>
-        <RouterLink to='/filters'>Filters</RouterLink>
-        <RouterLink to='/compliance'>Compliance</RouterLink>
-        <RouterLink to='/console'>Console</RouterLink>
-      </nav>
-    </header>
-    <main>
-      <RouterView />
-    </main>
-  </div>
-</template>
-<script setup lang='ts'></script>
