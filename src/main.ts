@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue';
+import { domainSurfaces } from './config/domainRoutes';
 import Attestations from './pages/Attestations.vue';
 import Builder from './pages/Builder.vue';
 import CodeSearch from './pages/CodeSearch.vue';
@@ -8,6 +9,7 @@ import Compliance from './pages/Compliance.vue';
 import Credentials from './pages/Credentials.vue';
 import Dashboard from './pages/Dashboard.vue';
 import Datasets from './pages/Datasets.vue';
+import DomainSurfacePage from './pages/DomainSurfacePage.vue';
 import Entities from './pages/Entities.vue';
 import Experiments from './pages/Experiments.vue';
 import Filters from './pages/Filters.vue';
@@ -27,10 +29,15 @@ import Terminal from './pages/Terminal.vue';
 import UiKit from './pages/UiKit.vue';
 import './styles.css';
 
+const mockedSurfaceRoutes = domainSurfaces
+  .filter((surface) => surface.route !== '/map')
+  .map((surface) => ({ path: surface.route, component: DomainSurfacePage }));
+
 const routes = [
   { path: '/', redirect: '/dashboard' },
   { path: '/dashboard', component: Dashboard },
   { path: '/map', component: MapPage },
+  ...mockedSurfaceRoutes,
   { path: '/builder', component: Builder },
   { path: '/entities', component: Entities },
   { path: '/layouts', component: Layouts },
