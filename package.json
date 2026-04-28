@@ -9,8 +9,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit",
-    "dev:storybook": "storybook dev -p 6006",
-    "build:storybook": "storybook build"
+    "verify": "npm run typecheck && npm run build",
+    "storybook:dev": "storybook dev -p 6006",
+    "storybook:build": "storybook build"
   },
   "dependencies": {
     "@carbon/icons-vue": "^10.99.1",
