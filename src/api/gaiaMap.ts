@@ -5,6 +5,7 @@ import type {
   MapLayerList,
   OsmFeatureBinding,
   RouteGraphList,
+  RuntimeBoundaryList,
   SherlockResult,
 } from '../types/gaiaMap';
 
@@ -42,6 +43,10 @@ export async function fetchRouteGraphs(): Promise<RouteGraphList> {
   return getJson<RouteGraphList>('/route-graphs/osm');
 }
 
+export async function fetchRuntimeBoundaries(): Promise<RuntimeBoundaryList> {
+  return getJson<RuntimeBoundaryList>('/runtime-boundaries/osm');
+}
+
 export async function fetchGovernance(): Promise<GovernanceState> {
   return getJson<GovernanceState>('/governance/osm');
 }
@@ -51,13 +56,14 @@ export async function fetchSherlockOsmDemo(): Promise<SherlockResult> {
 }
 
 export async function fetchGaiaMapSnapshot(): Promise<GaiaMapSnapshot> {
-  const [layers, feature, h3, routes, governance, search] = await Promise.all([
+  const [layers, feature, h3, routes, runtimeBoundaries, governance, search] = await Promise.all([
     fetchMapLayers(),
     fetchFeatureByOsm(),
     fetchFeaturesByH3(),
     fetchRouteGraphs(),
+    fetchRuntimeBoundaries(),
     fetchGovernance(),
     fetchSherlockOsmDemo(),
   ]);
-  return { layers, feature, h3, routes, governance, search };
+  return { layers, feature, h3, routes, runtimeBoundaries, governance, search };
 }
