@@ -19,6 +19,7 @@ import Layouts from './pages/Layouts.vue';
 import MapPage from './pages/MapPage.vue';
 import Policies from './pages/Policies.vue';
 import PorterConsole from './pages/PorterConsole.vue';
+import ProfessionalIntelligence from './pages/ProfessionalIntelligence.vue';
 import Reader from './pages/Reader.vue';
 import Research from './pages/Research.vue';
 import Runs from './pages/Runs.vue';
@@ -36,6 +37,7 @@ const mockedSurfaceRoutes = domainSurfaces
 const routes = [
   { path: '/', redirect: '/dashboard' },
   { path: '/dashboard', component: Dashboard },
+  { path: '/professional-intelligence', component: ProfessionalIntelligence },
   { path: '/map', component: MapPage },
   ...mockedSurfaceRoutes,
   { path: '/builder', component: Builder },
