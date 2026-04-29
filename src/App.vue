@@ -4,6 +4,7 @@
       <RouterLink class="sp-brand" to="/news">SocioProphet</RouterLink>
       <nav class="sp-domain-nav" aria-label="Primary domains">
         <RouterLink to="/news">News &amp; Events</RouterLink>
+        <RouterLink to="/professional-intelligence">Professional Intelligence</RouterLink>
         <RouterLink to="/law/international-law">Law &amp; Regulation</RouterLink>
         <RouterLink to="/people/search">People &amp; Society</RouterLink>
         <RouterLink to="/economy/macro-economics">Economy &amp; Industry</RouterLink>
@@ -22,6 +23,7 @@
     <div class="sp-workspace">
       <aside class="sp-left-rail" aria-label="Workspace rail">
         <RouterLink to="/news" title="News">☷</RouterLink>
+        <RouterLink to="/professional-intelligence" title="Professional Intelligence">PI</RouterLink>
         <RouterLink to="/reader" title="Reader">▤</RouterLink>
         <RouterLink to="/map" title="Maps">⌖</RouterLink>
         <RouterLink to="/people/search" title="People">◫</RouterLink>
@@ -61,6 +63,7 @@ const route = useRoute();
 
 const surface = computed(() => surfaceForRoute(route.path));
 const activeDomain = computed(() => {
+  if (route.path.startsWith('/professional-intelligence')) return 'Professional Intelligence';
   if (route.path.startsWith('/map')) return 'Maps & Analytics';
   if (surface.value?.domain) return surface.value.domain;
   if (route.path.startsWith('/analytics')) return 'Maps & Analytics';
@@ -68,6 +71,17 @@ const activeDomain = computed(() => {
 });
 
 const tabLinks = computed(() => {
+  if (activeDomain.value === 'Professional Intelligence') {
+    return [
+      { label: 'Control Dashboard', to: '/professional-intelligence' },
+      { label: 'Gates', to: '/gates' },
+      { label: 'Policies', to: '/policies' },
+      { label: 'Runs', to: '/runs' },
+      { label: 'Attestations', to: '/attestations' },
+      { label: 'Console', to: '/console' },
+    ];
+  }
+
   const surfaces = surfacesForDomain(activeDomain.value).slice(0, 6);
   if (activeDomain.value === 'Maps & Analytics') {
     return [
@@ -79,6 +93,7 @@ const tabLinks = computed(() => {
 });
 
 const breadcrumbs = computed(() => {
+  if (route.path.startsWith('/professional-intelligence')) return ['Professional Intelligence OS', 'Control dashboard'];
   if (route.path.startsWith('/map')) return ['Maps & Analytics', 'OpenStreetMap', 'GAIA world model'];
   if (surface.value) return [surface.value.domain, surface.value.item];
   const fallback = domainSurfaces.find((item) => route.path.startsWith(item.route));
