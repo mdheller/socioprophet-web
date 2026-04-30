@@ -190,25 +190,25 @@ const planRecord: KV[] = [
 const artifactCache: ArtifactEntry[] = [
   {
     name: 'sociosd-asahi-0.4.0-arm64.img',
-    digest: 'sha256:4a3b2c1d…e9f8a7b6',
+    digest: 'sha256:4a3b2c1d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d8e7f6a5b4c3d2e1f0a9b',
     source: 'oci://registry.socioprophet.io/nlboot/sociosd-asahi',
     status: 'hit',
   },
   {
     name: 'asahi-kernel-6.9.0-arm64.efi',
-    digest: 'sha256:1f2e3d4c…b5a69870',
+    digest: 'sha256:1f2e3d4c5b6a7980abcdef1234567890fedcba0987654321abcdef1234567890ab',
     source: 'oci://registry.socioprophet.io/nlboot/asahi-kernel',
     status: 'hit',
   },
   {
     name: 'nlboot-stub-0.4.0.efi',
-    digest: 'sha256:dead0000…beef1234',
+    digest: 'sha256:dead000011223344556677889900aabbccddeeff00112233445566778899aabbcc',
     source: 'oci://registry.socioprophet.io/nlboot/stub',
     status: 'hit',
   },
   {
     name: 'firmware-patch-rev12.bin',
-    digest: 'sha256:00000000…00000000',
+    digest: 'sha256:0000000000000000000000000000000000000000000000000000000000000000',
     source: 'oci://registry.socioprophet.io/nlboot/firmware-patches',
     status: 'miss',
   },
@@ -229,7 +229,7 @@ const execProof: KV[] = [
   { field: 'finished_at', value: '2026-04-30T08:07:43Z' },
   { field: 'duration_s', value: '212' },
   { field: 'exit_code', value: '0' },
-  { field: 'output_digest', value: 'sha256:cafebabe…12345678' },
+  { field: 'output_digest', value: 'sha256:cafebabe12345678aabbccddeeff00112233445566778899aabbccddeeff001122' },
   { field: 'agent', value: 'nlboot-agent@socioprophet' },
   { field: 'attested_by', value: 'socioprophet-evidence-svc v0.3.1' },
 ];
