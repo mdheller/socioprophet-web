@@ -17,6 +17,7 @@ import Gates from './pages/Gates.vue';
 import Journal from './pages/Journal.vue';
 import Layouts from './pages/Layouts.vue';
 import MapPage from './pages/MapPage.vue';
+import NLBootEvidence from './pages/NLBootEvidence.vue';
 import Policies from './pages/Policies.vue';
 import PorterConsole from './pages/PorterConsole.vue';
 import ProfessionalIntelligence from './pages/ProfessionalIntelligence.vue';
@@ -38,6 +39,7 @@ const routes = [
   { path: '/', redirect: '/dashboard' },
   { path: '/dashboard', component: Dashboard },
   { path: '/professional-intelligence', component: ProfessionalIntelligence },
+  { path: '/nlboot', component: NLBootEvidence },
   { path: '/map', component: MapPage },
   ...mockedSurfaceRoutes,
   { path: '/builder', component: Builder },
