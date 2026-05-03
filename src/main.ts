@@ -6,6 +6,7 @@ import Attestations from './pages/Attestations.vue';
 import Builder from './pages/Builder.vue';
 import CodeSearch from './pages/CodeSearch.vue';
 import Compliance from './pages/Compliance.vue';
+import ControlPlaneLifecycle from './pages/ControlPlaneLifecycle.vue';
 import Credentials from './pages/Credentials.vue';
 import Dashboard from './pages/Dashboard.vue';
 import Datasets from './pages/Datasets.vue';
@@ -39,6 +40,7 @@ const routes = [
   { path: '/', redirect: '/dashboard' },
   { path: '/dashboard', component: Dashboard },
   { path: '/professional-intelligence', component: ProfessionalIntelligence },
+  { path: '/control-plane', component: ControlPlaneLifecycle },
   { path: '/nlboot', component: NLBootEvidence },
   { path: '/map', component: MapPage },
   ...mockedSurfaceRoutes,
