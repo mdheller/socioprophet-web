@@ -1,8 +1,12 @@
 # Professional Intelligence dashboard state
 
-The dashboard reads a typed state module under `src/data/`.
+The Professional Intelligence dashboard reads a typed state module under:
 
-The generator script can create a generated module from the Prophet Platform Gate 4 dashboard JSON export.
+```text
+src/data/professionalIntelligenceControlState.ts
+```
+
+The generator script can recreate that module from the Prophet Platform Gate 4 dashboard JSON export.
 
 Command:
 
@@ -13,14 +17,21 @@ node scripts/generate-pi-dashboard-state.mjs path/to/dashboard-control-state.jso
 Default output:
 
 ```text
-src/data/professionalIntelligenceControlState.generated.ts
+src/data/professionalIntelligenceControlState.ts
 ```
 
-Current source of truth upstream:
+Current upstream source:
 
 ```text
 SocioProphet/prophet-platform
 build/professional-intelligence/dashboard-control-state.json
 ```
 
-Next step: wire the generated module into the dashboard when CI or release automation copies the platform export into this repo.
+The generator validates that the input includes:
+
+- `overallAlignment`
+- `metrics`
+- `gates`
+- `nextMoves`
+
+Next step: automate copying the Prophet Platform export into this repo during release or preview builds.
