@@ -3,21 +3,18 @@
     <header class="pi-hero">
       <div>
         <p class="pi-kicker">Professional Intelligence OS</p>
-        <h1 id="pi-title">SocioProphet operating dashboard</h1>
-        <p class="pi-lede">
-          Closed-loop control surface for the Professional Intelligence OS alignment wave:
-          contracts, playbooks, workrooms, policy, obligations, topology, evidence, adoption,
-          and demo readiness.
-        </p>
+        <h1 id="pi-title">{{ state.headline }}</h1>
+        <p class="pi-lede">{{ state.lede }}</p>
+        <p class="pi-generated">Control state generated: {{ state.generatedAt }}</p>
       </div>
       <div class="pi-scorecard" aria-label="Overall completion">
-        <span class="pi-score">40%</span>
+        <span class="pi-score">{{ state.overallAlignment }}%</span>
         <span class="pi-score-label">overall alignment</span>
       </div>
     </header>
 
     <section class="pi-grid pi-grid--metrics" aria-label="Workstream completion">
-      <article v-for="metric in metrics" :key="metric.name" class="pi-card pi-metric">
+      <article v-for="metric in state.metrics" :key="metric.name" class="pi-card pi-metric">
         <div class="pi-metric-head">
           <span>{{ metric.name }}</span>
           <strong>{{ metric.value }}%</strong>
@@ -33,7 +30,7 @@
       <article class="pi-card">
         <h2>Gate status</h2>
         <ol class="pi-gates">
-          <li v-for="gate in gates" :key="gate.name" :class="`pi-gate pi-gate--${gate.status}`">
+          <li v-for="gate in state.gates" :key="gate.name" :class="`pi-gate pi-gate--${gate.status}`">
             <span class="pi-gate-status">{{ gate.status }}</span>
             <div>
               <strong>{{ gate.name }}</strong>
@@ -46,7 +43,7 @@
       <article class="pi-card">
         <h2>Cybernetic controls</h2>
         <div class="pi-control-list">
-          <div v-for="control in controls" :key="control.name" class="pi-control">
+          <div v-for="control in state.controls" :key="control.name" class="pi-control">
             <strong>{{ control.name }}</strong>
             <p><b>Sense:</b> {{ control.signal }}</p>
             <p><b>Act:</b> {{ control.action }}</p>
@@ -61,7 +58,7 @@
           <h2>Active PR wave</h2>
           <p>Reviewable work currently anchoring the alignment wave.</p>
         </div>
-        <span class="pi-pill">9 tracked PRs</span>
+        <span class="pi-pill">{{ state.prs.length }} tracked PRs</span>
       </div>
       <div class="pi-table-wrap">
         <table class="pi-table">
@@ -74,7 +71,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in prs" :key="`${item.repo}-${item.pr}`">
+            <tr v-for="item in state.prs" :key="`${item.repo}-${item.pr}`">
               <td>{{ item.repo }}</td>
               <td>{{ item.pr }}</td>
               <td>{{ item.capability }}</td>
@@ -89,127 +86,26 @@
       <article class="pi-card">
         <h2>Completed controls</h2>
         <ul class="pi-list">
-          <li v-for="item in completed" :key="item">{{ item }}</li>
+          <li v-for="item in state.completed" :key="item">{{ item }}</li>
         </ul>
       </article>
       <article class="pi-card">
         <h2>Next control moves</h2>
         <ul class="pi-list">
-          <li v-for="item in nextMoves" :key="item">{{ item }}</li>
+          <li v-for="item in state.nextMoves" :key="item">{{ item }}</li>
         </ul>
       </article>
     </section>
 
     <section class="pi-card pi-callout">
       <h2>Integration rule</h2>
-      <p>
-        A subsystem is not integrated because it is referenced. It is integrated only when it has a
-        contract or manifest entry, a runtime/workflow/validation touchpoint, a governance owner,
-        evidence output or evidence reference, feedback into DelEx controls, and corrective action
-        when telemetry or validation shows drift.
-      </p>
+      <p>{{ state.integrationRule }}</p>
     </section>
   </section>
 </template>
 
 <script setup lang="ts">
-type Metric = {
-  name: string;
-  value: number;
-  note: string;
-};
-
-type Gate = {
-  name: string;
-  status: 'complete' | 'active' | 'pending';
-  summary: string;
-};
-
-type Control = {
-  name: string;
-  signal: string;
-  action: string;
-};
-
-type PullRequest = {
-  repo: string;
-  pr: string;
-  capability: string;
-  status: 'merged' | 'open';
-};
-
-const metrics: Metric[] = [
-  { name: 'Architecture spine', value: 40, note: 'Platform manifest and topology are established.' },
-  { name: 'DelEx governance', value: 45, note: 'Delivery model and control register are live.' },
-  { name: 'Platform contracts', value: 45, note: 'Core contracts and fixtures are validated.' },
-  { name: 'Playbooks', value: 35, note: 'Seed playbooks now have validation.' },
-  { name: 'Workrooms', value: 25, note: 'Workspace contract and fixture are merged.' },
-  { name: 'Governance loops', value: 45, note: 'Policy, obligation, and topology loops are forming.' },
-  { name: 'Cybernetic controls', value: 32, note: 'Sense/compare/act gates are being codified.' },
-  { name: 'Demo readiness', value: 30, note: 'Still not runnable end-to-end.' },
-];
-
-const gates: Gate[] = [
-  {
-    name: 'Gate 1 — alignment docs and seed contracts',
-    status: 'complete',
-    summary: 'Platform, DelEx automation, playbooks, workspace, policy, obligations, and topology are seeded.',
-  },
-  {
-    name: 'Gate 2 — validation fixtures',
-    status: 'active',
-    summary: 'Platform, DelEx automation, playbooks, workrooms, policy decisions, and obligations now validate; remaining validation work is search/query/execution.',
-  },
-  {
-    name: 'Gate 3 — runnable demo slice',
-    status: 'pending',
-    summary: 'Requires Agentplane workflow bundle, context pack, search/query packet, model routing, and guardrail pack.',
-  },
-  {
-    name: 'Gate 4 — integrated demo',
-    status: 'pending',
-    summary: 'Requires playbook-loaded → context-resolved → policy-checked → agent-step → workroom-updated → evidence/adoption emitted.',
-  },
-];
-
-const controls: Control[] = [
-  { name: 'Repo readiness', signal: 'Missing docs, schema, validation, CI, owner, or integration map.', action: 'Open or block work order until green.' },
-  { name: 'Demo readiness', signal: 'Missing playbook, context, policy, evidence, workroom, or adoption event.', action: 'Block demo credit and create corrective issue.' },
-  { name: 'Policy coverage', signal: 'Governed step lacks policy decision.', action: 'Block runtime/demo credit.' },
-  { name: 'Evidence coverage', signal: 'Workflow step lacks evidence reference.', action: 'Fail demo acceptance.' },
-  { name: 'Agent authority', signal: 'Agent lacks tool grant, scope, or revocation behavior.', action: 'Block agent execution.' },
-];
-
-const prs: PullRequest[] = [
-  { repo: 'SocioProphet/prophet-platform', pr: '#263', capability: 'Platform contracts', status: 'merged' },
-  { repo: 'SocioProphet/delivery-excellence', pr: '#5', capability: 'Control register', status: 'merged' },
-  { repo: 'SocioProphet/delivery-excellence-automation', pr: '#4', capability: 'Automation schemas', status: 'merged' },
-  { repo: 'SocioProphet/delivery-excellence-innersource', pr: '#5', capability: 'Playbooks', status: 'merged' },
-  { repo: 'SocioProphet/prophet-workspace', pr: '#7', capability: 'Workrooms', status: 'merged' },
-  { repo: 'SocioProphet/policy-fabric', pr: '#33', capability: 'Policy decisions', status: 'merged' },
-  { repo: 'SocioProphet/contractforge', pr: '#3', capability: 'Obligation ledger', status: 'merged' },
-  { repo: 'SocioProphet/sociosphere', pr: '#221', capability: 'Topology', status: 'merged' },
-  { repo: 'SocioProphet/socioprophet', pr: '#300', capability: 'Dashboard definition', status: 'merged' },
-];
-
-const completed = [
-  'Professional Intelligence platform manifest and seed contracts.',
-  'DelEx work item, repo readiness, and demo acceptance automation schemas.',
-  'Validated InnerSource playbooks.',
-  'Validated Professional Workroom fixture.',
-  'Professional Policy Decision schema with allow/review/deny examples.',
-  'ContractForge obligation schema and examples.',
-  'Sociosphere topology registration.',
-];
-
-const nextMoves = [
-  'Implement Agentplane workflow bundle and evidence mapping.',
-  'Add Agent Registry tool grants for workflow agents.',
-  'Add Memory Mesh scoped context pack support.',
-  'Add Sherlock search packet and Prophet Core Query context contract.',
-  'Add Model Router and Guardrail Fabric examples.',
-  'Replace static dashboard data with DelEx register and platform manifest ingestion.',
-];
+import { professionalIntelligenceControlState as state } from '../data/professionalIntelligenceControlState';
 </script>
 
 <style scoped>
@@ -261,11 +157,16 @@ h2 {
   font-size: 1.15rem;
 }
 
-.pi-lede {
+.pi-lede,
+.pi-generated {
   max-width: 760px;
-  margin-bottom: 0;
   color: rgba(255, 255, 255, 0.72);
   line-height: 1.55;
+}
+
+.pi-generated {
+  margin: 0.7rem 0 0;
+  font-size: 0.82rem;
 }
 
 .pi-scorecard {
